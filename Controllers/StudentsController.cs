@@ -13,11 +13,14 @@ namespace ContosoUniversity.Controllers
 		{
 			_context = context;
 		}
+
+        // get all for index, retrieve all students
 		public async Task<IActionResult> Index()
 		{
 			return View(await _context.Students.ToListAsync());
 		}
-		/*
+
+        /*
         public async Task<IActionResult> Index(
             string sortOrder,
             string currentFilter,
@@ -71,5 +74,27 @@ namespace ContosoUniversity.Controllers
             return View(await _context.Students.ToListAsync());
         }
         */
+
+        // Create get, haarab vaatest andmed, mida create meetod vajab.
+        [HttpGet]
+        public IActionResult Create() 
+        {
+            return View();
+        }
+
+        // Create meetod, sisestab andmebaasi uue õpilase. Insert new student into database
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ID,LastName,FirstMidName,EnrollmentDate")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Students.Add(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(student);
+        }
 	}
 }
