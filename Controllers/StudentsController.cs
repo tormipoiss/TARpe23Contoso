@@ -97,6 +97,24 @@ namespace ContosoUniversity.Controllers
             return View(student);
         }
 
+        //Details GET meetod, kuvab ühe õpilase andmed eraldi lehel
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Students
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
+        }
+
         //Delete GET meetod, otsib andmebaasist kaasaantud id järgi õpilast.
         public async Task<IActionResult> Delete(int? id)
         {
