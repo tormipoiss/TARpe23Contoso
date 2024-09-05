@@ -96,23 +96,29 @@ namespace ContosoUniversity.Controllers
             }
             return View(student);
         }
-
+        /// <summary>
+        /// Asünkroonne Details GET meetod. 
+        /// Leiab andmebaasist päringus oleva ID järgi õpilase
+        /// ning tagastab vaate koos selle õpilase infoga.
+        /// </summary>
+        /// <param name="id">Otsitava õpilase ID</param>
+        /// <returns>Tagastab kasutajale vaate, koos õpilase andmetega</returns>
         //Details GET meetod, kuvab ühe õpilase andmed eraldi lehel
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id) // id on optional, kuid vajalik eduka 
         {
-            if (id == null)
+            if (id == null) // kui id on tühi/null, siis õpilast ei leita
             {
                 return NotFound();
             }
 
-            var student = await _context.Students
+            var student = await _context.Students // Tehakse õpilase objekt, andmebaasis oleva ID järgi
                 .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (student == null)
+            if (student == null) // kui student objekt on tühi/null, siis ka õpilast ei leita
             {
                 return NotFound();
             }
-            return View(student);
+            return View(student); // tagastam kasutajale vaate koos õpilastega
         }
 
         //Delete GET meetod, otsib andmebaasist kaasaantud id järgi õpilast.
@@ -147,5 +153,35 @@ namespace ContosoUniversity.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-	}
+
+        // Clone meetod
+
+        public async Task<IActionResult> Clone(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Students // Tehakse õpilase objekt, andmebaasis oleva ID järgi
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var clonedStudent = new Student
+            {
+                LastName = student.LastName,
+                FirstMidName = student.FirstMidName,
+                EnrollmentDate = student.EnrollmentDate
+            };
+
+            _context.Students.Add(clonedStudent);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+    }
 }
