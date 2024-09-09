@@ -77,7 +77,7 @@ namespace ContosoUniversity.Controllers
 
         // Create get, haarab vaatest andmed, mida create meetod vajab.
         [HttpGet]
-        public IActionResult Create() 
+        public IActionResult Create()
         {
             return View();
         }
@@ -207,5 +207,29 @@ namespace ContosoUniversity.Controllers
 			}
 			return View(student);
 		}
-	}
+
+        // Merge GET
+
+        [HttpGet]
+        public IActionResult Merge()
+        {
+            return View();
+        }
+
+        // Merge POST
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Merge([Bind("ID,LastName,FirstMidName,EnrollmentDate")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                //_context.Students.Remove(student);
+                _context.Students.Update(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(student);
+        }
+    }
 }
