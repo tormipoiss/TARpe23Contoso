@@ -15,7 +15,6 @@ namespace Contoso_University.Controllers
             _context = context;
         }
         [HttpGet]
-
         public async Task<IActionResult> Index(int? id, int? courseId)
         {
             var vm = new InstructorIndexData();
@@ -43,7 +42,7 @@ namespace Contoso_University.Controllers
             {
                 ViewData["CourseID"] = courseId.Value;
                 vm.Enrollments = vm.Courses
-                    .Where(x => x.CourseId == courseId)
+                    .Where(x => x.CourseID == courseId)
                     .Single()
                     .Enrollments;
             }
@@ -61,21 +60,23 @@ namespace Contoso_University.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Instructor instructor, string selectedCourses)
+        public async Task<IActionResult> Create(Instructor instructor)
         {
-            if (selectedCourses == null)
-            {
-                instructor.CourseAssignments = new List<CourseAssignment>();
-                foreach (var course in selectedCourses)
-                {
-                    var courseToAdd = new CourseAssignment()
-                    {
-                        InstructorID = instructor.ID,
-                        CourseId = course
-                    };
-                    instructor.CourseAssignments.Add(courseToAdd);
-                }
-            }
+            //if (selectedCourses == null)
+            //{
+            //    instructor.CourseAssignments = new List<CourseAssignment>();
+            //    foreach (var course in selectedCourses)
+            //    {
+            //        var courseToAdd = new CourseAssignment()
+            //        {
+            //            InstructorID = instructor.ID,
+            //            CourseId = course
+            //        };
+            //        instructor.CourseAssignments.Add(courseToAdd);
+            //    }
+            //}
+            //ModelState.Remove();
+            //ModelState.Remove(selectedCourses);
             if (ModelState.IsValid) 
             {
                 _context.Add(instructor);
@@ -95,12 +96,45 @@ namespace Contoso_University.Controllers
             {
                 vm.Add(new AssignedCourseData
                 {
-					CourseID = course.CourseId,
+					CourseID = course.CourseID,
                     Title = course.Title,
-                    Assigned = instructorCourses.Contains(course.CourseId)
+                    Assigned = instructorCourses.Contains(course.CourseID)
                 });
             }
             ViewData["Courses"] = vm;
+		}
+
+		//Delete GET meetod, otsib andmebaasist kaasaantud id järgi õpetajat.
+		public async Task<IActionResult> Delete(int? id)
+		{
+			if (id == null) // Kui id on tühi/null, siis õpilast ei leia
+			{
+				return NotFound();
+			}
+
+			var instructor = await _context.Instructors // Tehakse õpetaja objekt, andmebaasis oleva ID järgi
+				.FirstOrDefaultAsync(m => m.ID == id);
+
+			if (instructor == null) // Kui õpetaja objekt on tühi/null, siis ka õpetajat ei leita
+			{
+				return NotFound();
+			}
+
+			return View(instructor);
+		}
+
+		// Delete POST meetod, teostab andmebaasis vajaliku muudatuse. Ehk kustutab andme ära
+
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var instructor = await _context.Instructors.FindAsync(id); //Otsime andmebaasist õpetajat id järgi, ja paneme ta "õpetaja" nimelisse muutujasse.
+
+			_context.Instructors.Remove(instructor);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction(nameof(Index));
 		}
 	}
 }

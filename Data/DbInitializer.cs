@@ -41,14 +41,14 @@ namespace Contoso_University.Data
             //eelnev struktuur, kuid kursustega: \/
             var courses = new Course[]
             {
-                new Course{CourseId=1050,Title="Keemia",Credits=3},
-                new Course{CourseId=4022,Title="Mikroökonoomika",Credits=3},
-                new Course{CourseId=4041,Title="Mikroökonoomika",Credits=3},
-                new Course{CourseId=1045,Title="Calculus",Credits=4},
-                new Course{CourseId=3141,Title="Trigonomeetria",Credits=4},
-                new Course{CourseId=2021,Title="Kompositsioon",Credits=3},
-                new Course{CourseId=2042,Title="Kirjandus",Credits=4},
-                new Course{CourseId=1069,Title="Kehaline Kasvatus",Credits=1}
+                new Course{CourseID=1050,Title="Keemia",Credits=3},
+                new Course{CourseID=4022,Title="Mikroökonoomika",Credits=3},
+                new Course{CourseID=4041,Title="Mikroökonoomika",Credits=3},
+                new Course{CourseID=1045,Title="Calculus",Credits=4},
+                new Course{CourseID=3141,Title="Trigonomeetria",Credits=4},
+                new Course{CourseID=2021,Title="Kompositsioon",Credits=3},
+                new Course{CourseID=2042,Title="Kirjandus",Credits=4},
+                new Course{CourseID=1069,Title="Kehaline Kasvatus",Credits=1}
             };
             foreach(Course course in courses)
             {

@@ -11,7 +11,7 @@ namespace ContosoUniversity.Controllers
 
 		public StudentsController(SchoolContext context)
 		{
-			_context = context;
+            _context = context;
 		}
 
         // get all for index, retrieve all students

@@ -22,13 +22,14 @@ namespace Contoso_University.Data
             modelBuilder.Entity<Student>().ToTable("Student");
             modelBuilder.Entity<Instructor>().ToTable("Instructors");
             modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssignments");
-            modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignments");
-            /* modelBuilder.Entity<Course>().ToTable("Course");
+			modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignments");
+			//modelBuilder.Entity<AssignedCourseData>().ToTable("CourseAssignments");
+			/* modelBuilder.Entity<Course>().ToTable("Course");
             modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
             modelBuilder.Entity<Course>().ToTable("Student");
 
             // /\ alternatiivne tablite nimetusmeetod
             */
-        }
+		}
     }
 }

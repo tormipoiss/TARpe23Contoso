@@ -4,6 +4,7 @@ using Contoso_University.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Contoso_University.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240913054920_newmigration236")]
+    partial class newmigration236
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +27,7 @@ namespace Contoso_University.Migrations
 
             modelBuilder.Entity("Contoso_University.Models.Course", b =>
                 {
-                    b.Property<int>("CourseID")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<int>("Credits")
@@ -34,7 +37,7 @@ namespace Contoso_University.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseID");
+                    b.HasKey("CourseId");
 
                     b.ToTable("Course", (string)null);
                 });

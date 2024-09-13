@@ -40,7 +40,7 @@
 				<td>
 					@foreach (var courses in item.CourseAssignments)
 					{
-						@courses.Course.CourseId @: @courses.Course.Title <br />
+						@courses.Course.CourseID @: @courses.Course.Title <br />
 					}
 				</td>
 				<td>@Html.DisplayFor(modelItem => item.Height)</td>
