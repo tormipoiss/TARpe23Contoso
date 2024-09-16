@@ -214,5 +214,46 @@ namespace Contoso_University.Controllers
 
 			return View(instructor);
 		}
+
+		// Clone meetod
+
+		public async Task<IActionResult> Clone(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			// Retrieve the instructor with their OfficeAssignment
+			var instructor = await _context.Instructors
+				.Include(i => i.OfficeAssignment) // Ensure OfficeAssignment is included
+				.FirstOrDefaultAsync(i => i.ID == id);
+
+			if (instructor == null)
+			{
+				return NotFound();
+			}
+
+			// Create a new Instructor instance, copying the properties
+			var clonedInstructor = new Instructor
+			{
+				LastName = instructor.LastName,
+				FirstMidName = instructor.FirstMidName,
+				HireDate = instructor.HireDate,
+				// Clone OfficeAssignment if it exists
+				OfficeAssignment = instructor.OfficeAssignment != null
+					? new OfficeAssignment
+					{
+						Location = instructor.OfficeAssignment.Location
+						// Add any other properties if needed
+					}
+					: null
+			};
+
+			_context.Instructors.Add(clonedInstructor);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction("Index");
+		}
 	}
 }
