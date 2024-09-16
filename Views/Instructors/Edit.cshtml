@@ -1,4 +1,4 @@
-﻿@model Contoso_University.Models.Student
+﻿@model Contoso_University.Models.Instructor
 
 @{
 	ViewData["Title"] = "Edit";
@@ -6,13 +6,14 @@
 
 <h1>Edit</h1>
 
-<h4>Student</h4>
+<h4>Instructor</h4>
 
 <hr />
 <div class="row">
 	<div class="col-md-4">
 		<form asp-action="Edit">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
 			<div class="form-group">
 				<label asp-for="LastName" class="control-label"></label>
 				<input asp-for="LastName" class="form-control" />
@@ -26,9 +27,15 @@
 			</div>
 
 			<div class="form-group">
-				<label asp-for="EnrollmentDate" class="control-label"></label>
-				<input asp-for="EnrollmentDate" class="form-control" />
-				<span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+				<label asp-for="HireDate" class="control-label"></label>
+				<input asp-for="HireDate" class="form-control" />
+				<span asp-validation-for="HireDate" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="OfficeAssignment.Location" class="control-label"></label>
+				<input asp-for="OfficeAssignment.Location" class="form-control" />
+				<span asp-validation-for="OfficeAssignment.Location" class="text-danger"></span>
 			</div>
 
 			<div class="form-group">
@@ -39,5 +46,5 @@
 </div>
 
 <div>
-	<a asp-action="Index">Back to list</a>
+	<a asp-action="Index" class="btn btn-outline-primary">Back to list</a>
 </div>

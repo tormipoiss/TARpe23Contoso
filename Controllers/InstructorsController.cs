@@ -136,5 +136,83 @@ namespace Contoso_University.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
+
+		// Edit GET
+
+		[HttpGet]
+		public IActionResult Edit()
+		{
+			var instructor = new Instructor();
+			return View();
+		}
+
+		// Edit POST
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(Instructor instructor)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					// Get the original instructor entity from the database including the related OfficeAssignment
+					var existingInstructor = await _context.Instructors
+						.Include(i => i.OfficeAssignment)
+						.FirstOrDefaultAsync(i => i.ID == instructor.ID);
+
+					if (existingInstructor == null)
+					{
+						return NotFound();
+					}
+
+					// If OfficeAssignment exists in the form, update it
+					if (instructor.OfficeAssignment != null)
+					{
+						// If there was no previous OfficeAssignment, add the new one
+						if (existingInstructor.OfficeAssignment == null)
+						{
+							existingInstructor.OfficeAssignment = instructor.OfficeAssignment;
+						}
+						else
+						{
+							// Update the existing OfficeAssignment's properties without changing the key
+							existingInstructor.OfficeAssignment.Location = instructor.OfficeAssignment.Location;
+						}
+					}
+					else
+					{
+						// If the OfficeAssignment was removed (set to null), delete it
+						if (existingInstructor.OfficeAssignment != null)
+						{
+							_context.OfficeAssignments.Remove(existingInstructor.OfficeAssignment);
+						}
+					}
+
+					// Update the other properties of the Instructor
+					existingInstructor.FirstMidName = instructor.FirstMidName;
+					existingInstructor.LastName = instructor.LastName;
+					existingInstructor.HireDate = instructor.HireDate;
+
+					// Save the changes
+					await _context.SaveChangesAsync();
+
+					return RedirectToAction(nameof(Index));
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!_context.Instructors.Any(i => i.ID == instructor.ID))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+			}
+
+			return View(instructor);
+		}
 	}
 }
