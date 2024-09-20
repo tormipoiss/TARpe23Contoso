@@ -46,8 +46,7 @@ namespace Contoso_University.Controllers
                     .Single()
                     .Enrollments;
             }
-
-            return View(vm);
+			return View(vm);
         }
 
         [HttpGet]
@@ -90,7 +89,7 @@ namespace Contoso_University.Controllers
 		private void PopulateAssignedCourseData(Instructor instructor)
 		{
             var allCourses = _context.Courses; // leiame kõik kursused
-            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(c => c.CourseId)); //valime kursused kus courseid on õpetajal olemas
+            var instructorCourses = new HashSet<int>(instructor.CourseAssignments.Select(c => c.CourseID)); //valime kursused kus courseid on õpetajal olemas
             var vm = new List<AssignedCourseData>(); // teeme viewmodeli jaoks uue nimekirja
             foreach (var course in allCourses) 
             {
