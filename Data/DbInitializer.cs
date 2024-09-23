@@ -1,4 +1,5 @@
-﻿using Contoso_University.Models;
+﻿using Contoso_University.Controllers;
+using Contoso_University.Models;
 
 namespace Contoso_University.Data
 {
@@ -49,32 +50,34 @@ namespace Contoso_University.Data
 			context.Courses.AddRange(courses);
 			context.SaveChanges();
 
+			/*
 			if (context.Enrollments.Any()) { return; }
 			var enrollments = new Enrollment[]
 			{
-				new Enrollment{StudentId=1,CourseId=1050,Grade=Grade.A},
-				new Enrollment{StudentId=1,CourseId=4022,Grade=Grade.C},
-				new Enrollment{StudentId=1,CourseId=4041,Grade=Grade.B},
+				new Enrollment{StudentId=1,CourseID=1050,Grade=Grade.A},
+				new Enrollment{StudentId=1,CourseID=4022,Grade=Grade.C},
+				new Enrollment{StudentId=1,CourseID=4041,Grade=Grade.B},
 
-				new Enrollment{StudentId=2,CourseId=1845,Grade=Grade.B},
-				new Enrollment{StudentId=2,CourseId=3141,Grade=Grade.F},
-				new Enrollment{StudentId=2,CourseId=2021,Grade=Grade.F},
+				new Enrollment{StudentId=2,CourseID=1845,Grade=Grade.B},
+				new Enrollment{StudentId=2,CourseID=3141,Grade=Grade.F},
+				new Enrollment{StudentId=2,CourseID=2021,Grade=Grade.F},
 
-				new Enrollment{StudentId=3,CourseId=1050},
+				new Enrollment{StudentId=3,CourseID=1050},
 
-				new Enrollment{StudentId=4,CourseId=1050},
-				new Enrollment{StudentId=4,CourseId=4022,Grade=Grade.F},
+				new Enrollment{StudentId=4,CourseID=1050},
+				new Enrollment{StudentId=4,CourseID=4022,Grade=Grade.F},
 
-				new Enrollment{StudentId=5,CourseId=4041,Grade=Grade.C},
+				new Enrollment{StudentId=5,CourseID=4041,Grade=Grade.C},
 
-				new Enrollment{StudentId=6,CourseId=1045},
+				new Enrollment{StudentId=6,CourseID=1045},
 
-				new Enrollment{StudentId=7,CourseId=3141,Grade=Grade.A},
+				new Enrollment{StudentId=7,CourseID=3141,Grade=Grade.A},
 				
-				new Enrollment{StudentId=10,CourseId=1069,Grade=Grade.A},
+				new Enrollment{StudentId=10,CourseID=1069,Grade=Grade.A},
 			};
 			context.Enrollments.AddRange(enrollments);
 			context.SaveChanges();
+			*/
 
 			if (context.Instructors.Any() ) { return; }
 			var instructor = new Instructor[]
@@ -96,6 +99,39 @@ namespace Contoso_University.Data
 					HairColor = "Brown"
 				},
 			};
+			context.Instructors.AddRange(instructor);
+			context.SaveChanges();
+
+			if(context.Departments.Any()) { return; }
+			var departments = new Department[]
+			{
+				new Department
+				{
+					Name = "McDonalds",
+					Budget = 0,
+					StartDate = DateTime.Parse("2024/09/01"),
+					FavoriteFood = "bigmac",
+					InstructorID = 1
+				},
+				new Department
+				{
+					Name = "Frog eaters",
+					Budget = 0,
+					StartDate = DateTime.Parse("2024/09/01"),
+					FavoriteFood = "frog leg",
+					InstructorID = 1
+				},
+				new Department
+				{
+					Name = "Big men 101",
+					Budget = 0,
+					StartDate = DateTime.Parse("2024/12/01"),
+					FavoriteFood = "beta males",
+				}
+			};
+			context.Departments.AddRange(departments);
+			context.SaveChanges();
+
 			//objekt õpilastega, mis lisatakse siis, kui õpilasi sisestatud ei ole
 			//var students = new Student[]
 			//{
@@ -139,26 +175,26 @@ namespace Contoso_University.Data
 
 			//var enrollments = new Enrollment[]
 			//{
-			//    new Enrollment{StudentId=1,CourseId=1050,Grade=Grade.A},
-			//    new Enrollment{StudentId=1,CourseId=4022,Grade=Grade.C},
-			//    new Enrollment{StudentId=1,CourseId=4041,Grade=Grade.B},
+			//    new Enrollment{StudentId=1,CourseID=1050,Grade=Grade.A},
+			//    new Enrollment{StudentId=1,CourseID=4022,Grade=Grade.C},
+			//    new Enrollment{StudentId=1,CourseID=4041,Grade=Grade.B},
 
-			//    new Enrollment{StudentId=2,CourseId=1845,Grade=Grade.B},
-			//    new Enrollment{StudentId=2,CourseId=3141,Grade=Grade.F},
-			//    new Enrollment{StudentId=2,CourseId=2021,Grade=Grade.F},
+			//    new Enrollment{StudentId=2,CourseID=1845,Grade=Grade.B},
+			//    new Enrollment{StudentId=2,CourseID=3141,Grade=Grade.F},
+			//    new Enrollment{StudentId=2,CourseID=2021,Grade=Grade.F},
 
-			//    new Enrollment{StudentId=3,CourseId=1050},
+			//    new Enrollment{StudentId=3,CourseID=1050},
 
-			//    new Enrollment{StudentId=4,CourseId=1050},
-			//    new Enrollment{StudentId=4,CourseId=4022,Grade=Grade.F},
+			//    new Enrollment{StudentId=4,CourseID=1050},
+			//    new Enrollment{StudentId=4,CourseID=4022,Grade=Grade.F},
 
-			//    new Enrollment{StudentId=5,CourseId=4041,Grade=Grade.C},
+			//    new Enrollment{StudentId=5,CourseID=4041,Grade=Grade.C},
 
-			//    new Enrollment{StudentId=6,CourseId=1045},
+			//    new Enrollment{StudentId=6,CourseID=1045},
 
-			//    new Enrollment{StudentId=7,CourseId=3141,Grade=Grade.A},
+			//    new Enrollment{StudentId=7,CourseID=3141,Grade=Grade.A},
 
-			//    new Enrollment{StudentId=10,CourseId=1069,Grade=Grade.A},
+			//    new Enrollment{StudentId=10,CourseID=1069,Grade=Grade.A},
 			//};
 			//foreach (Enrollment enrollment in enrollments)
 			//{
