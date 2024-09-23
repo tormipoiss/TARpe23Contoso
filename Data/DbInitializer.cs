@@ -70,7 +70,7 @@ namespace Contoso_University.Data
 				new Enrollment{StudentId=6,CourseId=1045},
 
 				new Enrollment{StudentId=7,CourseId=3141,Grade=Grade.A},
-
+				
 				new Enrollment{StudentId=10,CourseId=1069,Grade=Grade.A},
 			};
 			context.Enrollments.AddRange(enrollments);
