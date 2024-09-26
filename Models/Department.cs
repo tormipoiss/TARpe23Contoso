@@ -18,9 +18,9 @@ namespace Contoso_University.Models
         /*
          * Kaks oma andmetüüpi osakonna jaoks
          */
-        public Student? StudentAge { get; set; } // minu isklik anne, Student vanus
+        public int? EmployeeAmount { get; set; } // minu isklik anne, Employee amount
 		[Display(Name = "Favorite food:")]
-		public string? FavoriteFood { get; set; } // minu isiklik anne, Student lemmik toit
+		public string? FavoriteFood { get; set; } // minu teine isiklik anne, Student lemmik toit
         public int? InstructorID { get; set; }
         [Timestamp]
         public byte? RowVersion { get; set; }
