@@ -105,25 +105,7 @@ namespace Contoso_University.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id)
 		{
-			/*
-			if (id == null)
-			{
-				return NotFound();
-			}
-			/*
-			// Fetch the department by id including its related data if necessary
-			var department = await _context.Departments
-				.Include(d => d.Administrator) // Include related data if needed
-				.FirstOrDefaultAsync(m => m.DepartmentID == id);
-			
-
-			if (department == null)
-			{
-				return NotFound();
-			}
-			*/
-			// Pass the Instructor list for dropdown
-			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName"/*, department.InstructorID*/);
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName");
 			return View();
 		}
 
@@ -158,6 +140,89 @@ namespace Contoso_University.Controllers
 
 					// Save the changes
 					await _context.SaveChangesAsync();
+
+					return RedirectToAction("Index");
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!_context.Departments.Any(d => d.DepartmentID == department.DepartmentID))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+			}
+
+			// Reload the dropdown list and return to the view if model state is invalid
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
+			return View(department);
+		}
+
+		// BaseOn GET
+
+		[HttpGet]
+		public async Task<IActionResult> BaseOn(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			// Fetch the department by id including its related data if necessary
+			var department = await _context.Departments
+				.Include(d => d.Administrator) // Include related data if needed
+				.FirstOrDefaultAsync(m => m.DepartmentID == id);
+			
+
+			if (department == null)
+			{
+				return NotFound();
+			}
+			
+			// Pass the Instructor list for dropdown
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
+			return View(department);
+		}
+
+		// BaseOn POST
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> BaseOn(int id, [Bind("DepartmentID, Name, Budget, StartDate, RowVersion, InstructorID, EmployeeAmount, FavoriteFood")] Department department, string actionType)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					// Fetch the existing department from the database
+					var existingDepartment = await _context.Departments
+						.FirstOrDefaultAsync(d => d.DepartmentID == id);
+
+					if (existingDepartment == null)
+					{
+						return NotFound();
+					}
+
+					if (actionType == "Make")
+					{
+						_context.Add(department);
+
+						// Save the changes
+						await _context.SaveChangesAsync();
+					}
+
+					else if (actionType == "Make & Delete Old")
+					{
+						_context.Departments.Remove(existingDepartment);
+
+						_context.Add(department);
+
+						// Save changes to delete the old department
+						await _context.SaveChangesAsync();
+					}
 
 					return RedirectToAction("Index");
 				}
