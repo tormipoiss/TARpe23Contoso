@@ -10,12 +10,12 @@ namespace Contoso_University.Controllers
 	{
 		private readonly SchoolContext _context;
 
-        public DepartmentsController(SchoolContext context)
-        {
+		public DepartmentsController(SchoolContext context)
+		{
 			_context = context;
-        }
+		}
 
-        public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index()
 		{
 			var schoolContext = _context.Departments.Include(d => d.Administrator);
 			return View(await schoolContext.ToListAsync());
@@ -33,9 +33,9 @@ namespace Contoso_University.Controllers
 				.Include(d => d.Administrator)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-			if (department == null) 
-			{ 
-				return NotFound(); 
+			if (department == null)
+			{
+				return NotFound();
 			}
 			return View(department);
 		}
@@ -98,6 +98,83 @@ namespace Contoso_University.Controllers
 			await _context.SaveChangesAsync();
 
 			return RedirectToAction(nameof(Index));
+		}
+
+		// Edit GET
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			// Fetch the department by id including its related data if necessary
+			var department = await _context.Departments
+				.Include(d => d.Administrator) // Include related data if needed
+				.FirstOrDefaultAsync(m => m.DepartmentID == id);
+
+			if (department == null)
+			{
+				return NotFound();
+			}
+
+			// Pass the Instructor list for dropdown
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
+			return View(department);
+		}
+
+		// Edit POST
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, [Bind("DepartmentID, Name, Budget, StartDate, RowVersion, InstructorID, EmployeeAmount, FavoriteFood")] Department department)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					// Fetch the existing department from the database
+					var existingDepartment = await _context.Departments
+						.FirstOrDefaultAsync(d => d.DepartmentID == id);
+
+					if (existingDepartment == null)
+					{
+						return NotFound();
+					}
+
+					// Update the department fields manually
+					existingDepartment.Name = department.Name;
+					existingDepartment.Budget = department.Budget;
+					existingDepartment.StartDate = department.StartDate;
+					existingDepartment.EmployeeAmount = department.EmployeeAmount;
+					existingDepartment.FavoriteFood = department.FavoriteFood;
+
+					// Update the InstructorID (foreign key)
+					existingDepartment.InstructorID = department.InstructorID;
+
+					// Save the changes
+					await _context.SaveChangesAsync();
+
+					return RedirectToAction("Index");
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!_context.Departments.Any(d => d.DepartmentID == department.DepartmentID))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+			}
+
+			// Reload the dropdown list and return to the view if model state is invalid
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
+			return View(department);
 		}
 	}
 }
