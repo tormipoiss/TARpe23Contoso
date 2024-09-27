@@ -60,5 +60,44 @@ namespace Contoso_University.Controllers
 			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
 			return View(department);
 		}
+
+		//Delete GET meetod, otsib andmebaasist kaasaantud id järgi osakonda.
+
+		[HttpGet]
+		public async Task<IActionResult> Delete(int? id)
+		{
+			if (id == null) // Kui id on tühi/null, siis osakonda ei leia
+			{
+				return NotFound();
+			}
+
+			string query = "SELECT * FROM Departments WHERE DepartmentID = {0}"; // Tehakse osakonna objekt, andmebaasis oleva ID järgi
+			var department = await _context.Departments
+				.FromSqlRaw(query, id)
+				.Include(d => d.Administrator)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (department == null) // Kui õpetaja objekt on tühi/null, siis ka õpetajat ei leita
+			{
+				return NotFound();
+			}
+
+			return View(department);
+		}
+
+		// Delete POST meetod, teostab andmebaasis vajaliku muudatuse. Ehk kustutab andme ära
+
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var department = await _context.Departments.FindAsync(id); //Otsime andmebaasist osakonda id järgi, ja paneme ta "osakond" nimelisse muutujasse.
+
+			_context.Departments.Remove(department);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction(nameof(Index));
+		}
 	}
 }

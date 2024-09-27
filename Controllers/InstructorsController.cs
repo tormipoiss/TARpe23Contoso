@@ -106,7 +106,7 @@ namespace Contoso_University.Controllers
 		//Delete GET meetod, otsib andmebaasist kaasaantud id järgi õpetajat.
 		public async Task<IActionResult> Delete(int? id)
 		{
-			if (id == null) // Kui id on tühi/null, siis õpilast ei leia
+			if (id == null) // Kui id on tühi/null, siis õpetajat ei leia
 			{
 				return NotFound();
 			}
