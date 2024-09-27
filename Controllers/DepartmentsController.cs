@@ -105,24 +105,26 @@ namespace Contoso_University.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id)
 		{
+			/*
 			if (id == null)
 			{
 				return NotFound();
 			}
-
+			/*
 			// Fetch the department by id including its related data if necessary
 			var department = await _context.Departments
 				.Include(d => d.Administrator) // Include related data if needed
 				.FirstOrDefaultAsync(m => m.DepartmentID == id);
+			
 
 			if (department == null)
 			{
 				return NotFound();
 			}
-
+			*/
 			// Pass the Instructor list for dropdown
-			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
-			return View(department);
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName"/*, department.InstructorID*/);
+			return View();
 		}
 
 		// Edit POST
