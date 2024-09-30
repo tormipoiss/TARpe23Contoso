@@ -1,4 +1,5 @@
 ﻿using Contoso_University.Data;
+using Contoso_University.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,32 @@ namespace Contoso_University.Controllers
 				return NotFound();
 			}
 			return View(course);
+		}
+
+		public async Task<IActionResult> Clone(int id)
+		{
+			var course = await _context.Courses
+				.FirstOrDefaultAsync(c => c.CourseID == id);
+
+			if (course == null)
+			{
+				return NotFound();
+			}
+
+			var maxCourseID = await _context.Courses.MaxAsync(c => c.CourseID);
+			var newCourseID = maxCourseID + 1;
+
+			var clonedCourse = new Course
+			{
+				CourseID = newCourseID,
+				Title = course.Title,
+				Credits = course.Credits
+			};
+
+			_context.Courses.Add(clonedCourse);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction("Index");
 		}
 
 		[HttpGet]

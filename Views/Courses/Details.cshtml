@@ -7,6 +7,8 @@
 	<h4>Course</h4>
 	<hr />
 	<dl class="row">
+		<dt> @Html.DisplayNameFor(model => model.CourseID)</dt>
+		<dt> @Html.DisplayFor(model => model.CourseID)</dt>
 		<dt> @Html.DisplayNameFor(model => model.Title)</dt>
 		<dt> @Html.DisplayFor(model => model.Title)</dt>
 		<dt> @Html.DisplayNameFor(model => model.Credits)</dt>
@@ -15,4 +17,5 @@
 </div>
 <div>
 	<a asp-action="Index" class="btn btn-secondary">Index</a>
+	<a asp-action="Clone" asp-route-id="@Model.CourseID" class="btn btn-secondary">Clone</a>
 </div>

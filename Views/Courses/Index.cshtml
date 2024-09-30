@@ -9,6 +9,7 @@
 <table class="table">
 	<thead>
 		<tr>
+			<th> @Html.DisplayNameFor(model => model.CourseID) </th>
 			<th> @Html.DisplayNameFor(model => model.Title) </th>
 			<th> @Html.DisplayNameFor(model => model.Credits) </th>
 			<th>Available actions:</th>
@@ -19,6 +20,7 @@
 		@foreach (var course in Model)
 		{
 			<tr>
+				<td> @Html.DisplayFor(modelItem => course.CourseID) </td>
 				<td> @Html.DisplayFor(modelItem => course.Title) </td>
 				<td> @Html.DisplayFor(modelItem => course.Credits) </td>
 				<td>
