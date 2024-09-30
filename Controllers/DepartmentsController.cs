@@ -105,10 +105,22 @@ namespace Contoso_University.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(int? id)
 		{
-			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName");
-			return View();
+			if (id == null)
+			{
+				return NotFound();
+			}
+			// Fetch the department by id including its related data if necessary
+			var department = await _context.Departments
+				.Include(d => d.Administrator) // Include related data if needed
+				.FirstOrDefaultAsync(m => m.DepartmentID == id);
+			if (department == null)
+			{
+				return NotFound();
+			}
+			// Pass the Instructor list for dropdown
+			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
+			return View(department);
 		}
-
 		// Edit POST
 
 		[HttpPost]
@@ -122,25 +134,20 @@ namespace Contoso_University.Controllers
 					// Fetch the existing department from the database
 					var existingDepartment = await _context.Departments
 						.FirstOrDefaultAsync(d => d.DepartmentID == id);
-
 					if (existingDepartment == null)
 					{
 						return NotFound();
 					}
-
 					// Update the department fields manually
 					existingDepartment.Name = department.Name;
 					existingDepartment.Budget = department.Budget;
 					existingDepartment.StartDate = department.StartDate;
 					existingDepartment.EmployeeAmount = department.EmployeeAmount;
 					existingDepartment.FavoriteFood = department.FavoriteFood;
-
 					// Update the InstructorID (foreign key)
 					existingDepartment.InstructorID = department.InstructorID;
-
 					// Save the changes
 					await _context.SaveChangesAsync();
-
 					return RedirectToAction("Index");
 				}
 				catch (DbUpdateConcurrencyException)
@@ -155,7 +162,6 @@ namespace Contoso_University.Controllers
 					}
 				}
 			}
-
 			// Reload the dropdown list and return to the view if model state is invalid
 			ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
 			return View(department);
