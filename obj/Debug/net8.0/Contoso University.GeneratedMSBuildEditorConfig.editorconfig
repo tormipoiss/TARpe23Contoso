@@ -18,16 +18,12 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\tormi\Desktop\Programmeerimine\Contoso University
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/tormi/Desktop/Programmeerimine/Contoso University/Views/Courses/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlc1xDcmVhdGUuY3NodG1s
+[C:/Users/tormi/Desktop/Programmeerimine/Contoso University/Views/Courses/CreateEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlc1xDcmVhdGVFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/tormi/Desktop/Programmeerimine/Contoso University/Views/Courses/DetailsDelete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlc1xEZXRhaWxzRGVsZXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/tormi/Desktop/Programmeerimine/Contoso University/Views/Courses/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/tormi/Desktop/Programmeerimine/Contoso University/Views/Courses/Index.cshtml]
