@@ -82,5 +82,35 @@ namespace Contoso_University.Controllers
 
 			return RedirectToAction("Index");
 		}
+
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create([Bind("CourseID,Title,Credits")] Course course)
+		{
+			if (ModelState.IsValid)
+			{
+				if (_context.Courses.Any(c => c.CourseID == course.CourseID))
+				{
+					// Add a validation error to the ModelState
+					ModelState.AddModelError("CourseID", "CourseID already exists. Please enter an unique CourseID.");
+					return View(course); // Return the same view with the error message
+				}
+				if (course.CourseID < 0)
+				{
+					ModelState.AddModelError("CourseID", "CourseID is negative. Please enter a positive CourseID.");
+					return View(course);
+				}
+				_context.Courses.Add(course);
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Index");
+			}
+			return View(course);
+		}
 	}
 }
