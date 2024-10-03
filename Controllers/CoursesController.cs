@@ -19,7 +19,8 @@ namespace Contoso_University.Controllers
 			return View(await _context.Courses.ToListAsync());
         }
 
-		public async Task<IActionResult> Details(int? id)
+		[HttpGet]
+		public async Task<IActionResult> DetailsDelete(int? id, string mode)
 		{
 			if (id == null)
 			{
@@ -33,7 +34,27 @@ namespace Contoso_University.Controllers
 			{
 				return NotFound();
 			}
+
+			ViewBag.Mode = mode;
+
 			return View(course);
+		}
+
+		[HttpPost, ActionName("DetailsDelete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DetailsDeleteConfirmed(int id)
+		{
+			var course = await _context.Courses.FindAsync(id);
+
+			if (course == null)
+			{
+				return NotFound();
+			}
+
+			_context.Courses.Remove(course);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction(nameof(Index));
 		}
 
 		public async Task<IActionResult> Clone(int id)
@@ -60,37 +81,6 @@ namespace Contoso_University.Controllers
 			await _context.SaveChangesAsync();
 
 			return RedirectToAction("Index");
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> Delete(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
-
-			var course = await _context.Courses
-				.FirstOrDefaultAsync(c => c.CourseID == id);
-
-			if (course == null)
-			{
-				return NotFound();
-			}
-
-			return View(course);
-		}
-
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var course = await _context.Courses.FindAsync(id);
-
-			_context.Courses.Remove(course);
-			await _context.SaveChangesAsync();
-
-			return RedirectToAction(nameof(Index));
 		}
 	}
 }
